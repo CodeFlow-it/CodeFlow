@@ -1,0 +1,14 @@
+name: CD Pipeline - CodeFlow
+run-name: CI Pipeline triggered by ${{ github.actor }} 🚀
+on:
+  push:
+    branches:
+      - main
+      - release
+
+jobs:
+  RunTests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3

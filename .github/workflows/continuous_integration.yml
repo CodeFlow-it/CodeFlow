@@ -1,0 +1,15 @@
+name: CI Pipeline - CodeFlow
+run-name: CI Pipeline triggered by ${{ github.actor }} 🚀
+on:
+  push:
+    # Do not run the CI on main and release branches
+    branches-ignore:
+      - "main"
+      - "release"
+
+jobs:
+  RunTests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
