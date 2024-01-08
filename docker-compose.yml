@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  frontend:
+    image: frontend
+    build: ./packages/frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./packages/frontend:/app
+    depends_on:
+      - backend
+  backend:
+    image: backend
+    build: ./packages/backend
+    ports:
+      - "8000:80"
+    volumes:
+      - ./packages/backend:/app
+    depends_on:
+      - db
+  db:
+    image: mariadb
+    ports:
+      - "5432:5432"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    volumes:
+      - ./packages/db:/var/lib/mysql
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ./packages/rabbitmq:/var/lib/rabbitmq
+  exakat:
+    image: exakat/exakat:latest
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./packages/exakat:/usr/src/exakat
