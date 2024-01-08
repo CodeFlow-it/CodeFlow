@@ -37,9 +37,3 @@ services:
       - "5672:5672"
     volumes:
       - ./packages/rabbitmq:/var/lib/rabbitmq
-  exakat:
-    image: exakat/exakat:latest
-    ports:
-      - "9000:9000"
-    volumes:
-      - ./packages/exakat:/usr/src/exakat
