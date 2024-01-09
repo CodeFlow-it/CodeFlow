@@ -20,7 +20,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./packages/backend:/app
+      - ./packages/backend:/var/www/app/
     depends_on:
       - db
   db:
