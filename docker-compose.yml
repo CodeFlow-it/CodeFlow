@@ -21,6 +21,8 @@ services:
       - "8000:80"
     volumes:
       - ./packages/backend:/var/www/app/
+      - /var/www/app/vendor
+      - /var/www/app/var
     depends_on:
       - db
   db:
