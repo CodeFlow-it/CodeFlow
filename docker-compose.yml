@@ -8,8 +8,12 @@ services:
       - "8080:8080"
     volumes:
       - ./packages/frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
+    environment:
+      - NODE_ENV=development
+
   backend:
     image: backend
     build: ./packages/backend
