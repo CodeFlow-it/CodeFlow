@@ -25,7 +25,7 @@ RUN composer install --no-scripts --no-autoloader
 
 RUN composer dump-autoload --optimize
 
-RUN chown -R www-data:www-data /var/www/app/var
+RUN chown -R www-data:www-data /var/www/app/
 
 RUN sed -i 's!/var/www/html!/var/www/app/public!g' \
     /etc/apache2/sites-available/000-default.conf
