@@ -13,7 +13,8 @@ RUN docker-php-ext-install \
     intl \
     zip \
     pdo_mysql \
-    pdo 
+    pdo \
+    sockets
 
 RUN a2enmod rewrite
 
