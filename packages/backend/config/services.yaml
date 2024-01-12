@@ -33,3 +33,7 @@ services:
       $port: "%rabbitmq.port%"
       $user: "%rabbitmq.user%"
       $password: "%rabbitmq.password%"
+
+  App\Service\QueueManagerService:
+    arguments:
+      $rabbitMQConnectionService: '@App\Service\RabbitMQConnectionService'
