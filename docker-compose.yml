@@ -23,6 +23,7 @@ services:
       - ./packages/backend:/var/www/app/
       - /var/www/app/vendor
       - /var/www/app/var
+      - ./packages/repositories:/var/www/app/repositories
     depends_on:
       - db
   db:
@@ -43,3 +44,10 @@ services:
       - "5672:5672"
     volumes:
       - ./packages/rabbitmq:/var/lib/rabbitmq
+  exakat:
+    image: exakat
+    build: ./packages/exakat
+    volumes:
+      - ./packages/repositories:/app/repositories
+    depends_on:
+      - rabbitmq

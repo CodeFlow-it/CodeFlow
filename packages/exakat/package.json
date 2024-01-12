@@ -1,0 +1,30 @@
+{
+  "name": "exakat",
+  "version": "0.0.0",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "clean:dist": "rm -rf dist",
+    "build": "yarn clean:dist && tsc",
+    "test": "jest",
+    "lint": "eslint . --ext .ts",
+    "start": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.4",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.7",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^43.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "*"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.3"
+  }
+}
