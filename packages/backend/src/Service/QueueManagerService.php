@@ -5,12 +5,17 @@ namespace App\Service;
 use App\Service\RabbitMQConnectionService;
 use PhpAmqpLib\Message\AMQPMessage;
 
+/**
+ * Service for managing queue and message
+ */
 class QueueManagerService
 {
     /**
      * @var RabbitMQConnectionService
      */
     private RabbitMQConnectionService $rabbitMQConnectionService;
+
+    private string $queueName;
 
     /**
      * QueueManagerService constructor
@@ -30,6 +35,7 @@ class QueueManagerService
      */
     public function createQueue(string $queueName): void
     {
+        $this->queueName = $queueName;
         $channel = $this->rabbitMQConnectionService->getConnection()->channel();
         $channel->queue_declare($queueName, false, false, false, false);
         $channel->close();
@@ -50,5 +56,15 @@ class QueueManagerService
         $channel->basic_publish($message, '', $queueName);
         $channel->close();
         $this->rabbitMQConnectionService->getConnection()->close();
+    }
+
+    /**
+     * Queue name getter
+     * 
+     * @return string The name of the queue
+     */
+    public function getQueueName(): string
+    {
+        return $this->queueName;
     }
 }
