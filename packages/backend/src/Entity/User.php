@@ -26,6 +26,9 @@ class User implements UserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $accessToken = null;
 
+    #[ORM\Column]
+    private ?int $githubId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -101,6 +104,18 @@ class User implements UserInterface
     public function setAccessToken(?string $accessToken): static
     {
         $this->accessToken = $accessToken;
+
+        return $this;
+    }
+
+    public function getGithubId(): ?int
+    {
+        return $this->githubId;
+    }
+
+    public function setGithubId(int $githubId): static
+    {
+        $this->githubId = $githubId;
 
         return $this;
     }
