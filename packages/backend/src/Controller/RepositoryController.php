@@ -2,20 +2,30 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpClient\Exception\TransportException;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Process\Process;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RepositoryController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     #[Route('api/repository/{name}', name: 'app_repository')]
     public function index(string $name): JsonResponse
     {
-        $username = '';
+        $user = $this->getUser();
+
+        $username = $user->getUsername();
         $accessToken = '';
         $targetDirectory = $this->createUserDirectory($username);
 
