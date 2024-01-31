@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Process\Process;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,13 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RepositoryController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
     private const GITHUB_API_VERSION = '2022-11-28';
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
 
     #[Route('api/repositories', name: 'app_repositories')]
     public function index()
@@ -33,8 +28,8 @@ class RepositoryController extends AbstractController
 
         $accessToken = $user->getAccessToken();
         $url = 'https://api.github.com/user/repos';
-                
-        $repositories = $this->fetchGithubApi($url , $accessToken);
+
+        $repositories = $this->fetchGithubApi($url, $accessToken);
 
         return $this->json(['repo' => $repositories]);
     }
@@ -71,18 +66,21 @@ class RepositoryController extends AbstractController
     private function createUserDirectory(string $username, string $projectName): string
     {
         $targetDirectory = $this->getParameter('kernel.project_dir') . '/repositories/' . '/' .  $username . '/' . $projectName;
-        
-        if (!is_dir($targetDirectory)) {
-            mkdir($targetDirectory, 0777, true);
+        $filesystem = new Filesystem();
+
+        if ($filesystem->exists($targetDirectory)) {
+            $filesystem->remove($targetDirectory);
         }
-        
+
+        $filesystem->mkdir($targetDirectory);
+
         return $targetDirectory;
     }
 
     private function getGitHubRepositoryInformation(string $username, string $name, string $accessToken): array
     {
         $httpClient = HttpClient::create();
-        $response = $httpClient->request('GET', 'https://api.github.com/repos/'. $username . '/' . $name, [
+        $response = $httpClient->request('GET', 'https://api.github.com/repos/' . $username . '/' . $name, [
             'headers' => [
                 'Accept' => 'application/vnd.github+json',
                 'Authorization' => 'Bearer ' . $accessToken,
