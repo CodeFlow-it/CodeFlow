@@ -14,24 +14,47 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class RepositoryController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
+    private const GITHUB_API_VERSION = '2022-11-28';
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    #[Route('api/repository/{name}', name: 'app_repository')]
-    public function index(string $name): JsonResponse
+    #[Route('api/repositories', name: 'app_repositories')]
+    public function index()
     {
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $accessToken = $user->getAccessToken();
+        $url = 'https://api.github.com/user/repos';
+                
+        $repositories = $this->fetchGithubApi($url , $accessToken);
+
+        return $this->json(['repo' => $repositories]);
+    }
+
+    #[Route('api/repository/clone/{projectName}', name: 'app_repository')]
+    public function clone(string $projectName): JsonResponse
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
         $username = $user->getUsername();
-        $accessToken = '';
-        $targetDirectory = $this->createUserDirectory($username);
+        $accessToken = $user->getAccessToken();
+        $targetDirectory = $this->createUserDirectory($username, $projectName);
 
         try {
-
-            $repository = $this->getGitHubRepositoryInformation($username, $accessToken);
+            $repository = $this->getGitHubRepositoryInformation($username, $projectName, $accessToken);
             $repositoryUrl = $repository['html_url'];
 
             $this->cloneRepository($repositoryUrl, $targetDirectory);
@@ -45,29 +68,48 @@ class RepositoryController extends AbstractController
         }
     }
 
-    private function createUserDirectory(string $username): string
+    private function createUserDirectory(string $username, string $projectName): string
     {
-        $targetDirectory = $this->getParameter('kernel.project_dir') . '/repositories/' . $username;
+        $targetDirectory = $this->getParameter('kernel.project_dir') . '/repositories/' . '/' .  $username . '/' . $projectName;
+        
         if (!is_dir($targetDirectory)) {
             mkdir($targetDirectory, 0777, true);
         }
-
+        
         return $targetDirectory;
     }
 
-    private function getGitHubRepositoryInformation(string $name, string $accessToken): array
+    private function getGitHubRepositoryInformation(string $username, string $name, string $accessToken): array
     {
         $httpClient = HttpClient::create();
-        $response = $httpClient->request('GET', 'https://api.github.com/repos/' . $name, [
+        $response = $httpClient->request('GET', 'https://api.github.com/repos/'. $username . '/' . $name, [
             'headers' => [
                 'Accept' => 'application/vnd.github+json',
                 'Authorization' => 'Bearer ' . $accessToken,
-                'X-GitHub-Api-Version' => '2022-11-28',
+                'X-GitHub-Api-Version' => self::GITHUB_API_VERSION,
             ],
         ]);
 
         if ($response->getStatusCode() !== 200) {
             throw new \Exception('Unable to retrieve repository information.');
+        }
+
+        return $response->toArray();
+    }
+
+    private function fetchGithubApi(string $url, string $accessToken): array
+    {
+        $httpClient = HttpClient::create();
+        $response = $httpClient->request('GET', $url, [
+            'headers' => [
+                'Accept' => 'application/vnd.github+json',
+                'Authorization' => 'Bearer ' . $accessToken,
+                'X-GitHub-Api-Version' => self::GITHUB_API_VERSION,
+            ],
+        ]);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception('Unable to retrieve fetch api.');
         }
 
         return $response->toArray();

@@ -44,21 +44,23 @@ class GithubAuthenticator extends OAuth2Authenticator
                 $email = $githubUser->getEmail();
                 $username = $githubUser->toArray()['login'];
 
-                $existingUser = $this->entityManager->getRepository(User::class)->findOneBy([
+                $user = $this->entityManager->getRepository(User::class)->findOneBy([
                     'githubId' => $githubUser->getId()
                 ]);
 
-                if (!$existingUser) {
-                    $existingUser = new User();
-                    $existingUser->setEmail($email);
-                    $existingUser->setUsername($username);
-                    $existingUser->setGithubId($githubUser->getId());
-                    $this->entityManager->persist($existingUser);
+                if (!$user) {
+                    $user = new User();
+                    $user->setRoles(['ROLE_USER']);
+                    $user->setEmail($email);
+                    $user->setUsername($username);
+                    $user->setGithubId($githubUser->getId());
                 }
-
+                
+                $user->setAccessToken($accessToken);
+                $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
-                return $existingUser;
+                return $user;
             })
         );
     }
