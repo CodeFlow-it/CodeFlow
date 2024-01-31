@@ -39,7 +39,7 @@ class RepositoryController extends AbstractController
         return $this->json(['repo' => $repositories]);
     }
 
-    #[Route('api/repository/clone/{projectName}', name: 'app_repository')]
+    #[Route('api/repository/clone/{projectName}', name: 'app_clone_repository')]
     public function clone(string $projectName): JsonResponse
     {
         /** @var \App\Entity\User $user */
