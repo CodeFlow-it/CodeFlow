@@ -8,6 +8,7 @@ parameters:
   rabbitmq.port: 5672
   rabbitmq.user: "%env(RABBITMQ_USER)%"
   rabbitmq.password: "%env(RABBITMQ_PASSWORD)%"
+  dashboardUrl: "%env(DASHBOARD_URL)%"
 
 services:
   # default configuration for services in *this* file
