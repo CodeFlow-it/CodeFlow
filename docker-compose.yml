@@ -26,6 +26,7 @@ services:
       - ./packages/repositories:/var/www/app/repositories
     depends_on:
       - db
+
   db:
     image: mariadb
     ports:
@@ -37,6 +38,7 @@ services:
       MYSQL_PASSWORD: test
     volumes:
       - ./packages/db:/var/lib/mysql
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -44,6 +46,7 @@ services:
       - "5672:5672"
     volumes:
       - ./packages/rabbitmq:/var/lib/rabbitmq
+
   exakat:
     image: exakat
     build: ./packages/exakat
@@ -51,3 +54,8 @@ services:
       - ./packages/repositories:/app/repositories
     depends_on:
       - rabbitmq
+
+  adminer:
+    image: adminer
+    ports:
+      8888:8080
