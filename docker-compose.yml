@@ -58,4 +58,4 @@ services:
   adminer:
     image: adminer
     ports:
-      8888:8080
+      - "8888:8080"
