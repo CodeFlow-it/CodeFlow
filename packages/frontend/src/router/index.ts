@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import DashboardView from "@/views/DashboardView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "authentification",
     component: HomeView,
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: DashboardView,
   },
 ];
 

@@ -2,7 +2,7 @@
   <div class="auth-view">
     <img src="../assets/codeflow.png" alt="" />
     <hello-world>Authentification</hello-world>
-    <ButtonComp msg="Connexion" onclick="setup()"></ButtonComp>
+    <ButtonComp msg="Connexion" :url="apiUrl"></ButtonComp>
   </div>
 </template>
 
@@ -15,29 +15,7 @@ import ButtonComp from "@/components/button.vue";
 export default defineComponent({
   name: "AuthView",
   setup() {
-    const router = useRouter();
-    const apiUrl = ref(process.env.VUE_APP_GITHUB_SSO);
-
-    onMounted(async () => {
-      try {
-        const response = await fetch(apiUrl.value);
-
-        // Vérifiez si la réponse est réussie
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP: ${response.status}`);
-        }
-
-        // Tentez de lire la réponse en tant que JSON
-        const data = await response.json();
-
-        if (data.message === "Authentication success") {
-          router.push("/path-to-your-repositories-page");
-        }
-      } catch (error) {
-        console.error("Erreur lors de la récupération de l'API:", error);
-        // Vous pourriez aussi examiner ici le contenu brut de 'error'
-      }
-    });
+    const apiUrl = ref("http://localhost:8000/connect/github");
 
     return { apiUrl };
   },
