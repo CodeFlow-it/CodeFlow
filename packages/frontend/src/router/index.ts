@@ -3,7 +3,7 @@ import HomeView from "../views/HomeView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/auth",
+    path: "/",
     name: "authentification",
     component: HomeView,
   },

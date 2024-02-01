@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <router-link to="/auth">Auth</router-link>
+    <router-link to="/">Auth</router-link>
   </nav>
   <router-view />
 </template>

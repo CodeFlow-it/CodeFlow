@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <h1>Authentification</h1>
-    <p>test 2321313213.514</p>
   </div>
 </template>
 
@@ -18,6 +17,10 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+h1 {
+  color: white;
+  font-size: larger;
+}
 h3 {
   margin: 40px 0 0;
 }
