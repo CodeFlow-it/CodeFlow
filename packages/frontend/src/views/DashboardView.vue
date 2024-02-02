@@ -1,9 +1,11 @@
 <template>
   <div>
-    <ul>
-      <li v-for="repo in repositories" :key="repo.id">
-        <p>{{ repo.name }}</p>
-        <a :href="repo.html_url" target="_blank">{{ repo.html_url }}</a>
+    <ul class="ul">
+      <li class="liste" v-for="repo in repositories" :key="repo.id">
+        <h2 class="titre">{{ repo.name }}</h2>
+        <a class="lien" :href="repo.html_url" target="_blank">{{
+          repo.html_url
+        }}</a>
       </li>
     </ul>
   </div>
@@ -41,4 +43,44 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style>
+.titre {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.ul {
+  padding-left: 20px;
+  list-style-type: none;
+  margin: 0;
+}
+
+.liste {
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 5px;
+}
+
+.liste::before {
+  color: #007bff;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.liste:first-child {
+  padding-top: 15px;
+}
+
+.liste:last-child {
+  border-bottom: none;
+  padding-bottom: 15px;
+  margin-bottom: 0;
+}
+
+.lien {
+  color: #cccccc;
+  text-decoration: underline;
+}
+</style>
