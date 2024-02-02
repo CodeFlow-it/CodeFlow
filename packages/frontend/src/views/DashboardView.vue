@@ -1,6 +1,10 @@
 <template>
   <div>
-    <ul class="ul">
+    <!-- Afficher le gif d'attente si isLoading est vrai -->
+    <div v-if="isLoading">
+      <img src="../assets/XOsX.gif" alt="Chargement..." />
+    </div>
+    <ul class="ul" v-else>
       <li class="liste" v-for="repo in repositories" :key="repo.id">
         <h2 class="titre">{{ repo.name }}</h2>
         <a class="lien" :href="repo.html_url" target="_blank">{{
@@ -13,14 +17,15 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
-
 export default defineComponent({
   name: "DashboardView",
 
   setup() {
+    const isLoading = ref(true);
     const repositories = ref([]);
 
     const fetchRepositories = async () => {
+      isLoading.value = true; // Commencer le chargement
       try {
         const response = await fetch("http://localhost:8000/api/repositories", {
           method: "GET",
@@ -30,15 +35,17 @@ export default defineComponent({
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
         const data = await response.json();
-        repositories.value = data.repo; // Assurez-vous que la structure des données correspond
+        repositories.value = data.repo; // Mise à jour des données
       } catch (error) {
         console.error("Erreur lors de la récupération des données:", error);
+      } finally {
+        isLoading.value = false; // Fin du chargement
       }
     };
 
     onMounted(fetchRepositories);
 
-    return { repositories };
+    return { repositories, isLoading };
   },
 });
 </script>
