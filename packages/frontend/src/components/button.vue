@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button>
+    <button class="button">
       <a href="http://localhost:8000/connect/github">{{ msg }}</a>
     </button>
   </div>
@@ -17,7 +17,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-button {
+.button {
   background-color: #4caf50;
   color: white;
   padding: 15px 32px;
@@ -32,7 +32,7 @@ button {
   transition-duration: 0.4s;
 }
 
-button:hover {
+.button:hover {
   background-color: #45a049;
 }
 </style>
