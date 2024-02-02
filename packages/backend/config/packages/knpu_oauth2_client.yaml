@@ -1,8 +1,39 @@
+nelmio_cors:
+    defaults:
+        origin_regex: true
+        allow_origin: ['http://localhost:8081']
+        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
+        allow_headers: ['Content-Type', 'Authorization']
+        expose_headers: ['Link']
+        max_age: 3600
+        hosts: []
+        allow_credentials: true
+    paths:
+        '^/api/':
+            allow_origin: ['*']
+            allow_headers: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'Access-Control-Request-Method', 'Access-Control-Request-Headers']
+            allow_methods: ['POST', 'PUT', 'GET', 'DELETE', 'OPTIONS']
+            max_age: 3600
+            allow_credentials: true
 knpu_oauth2_client:
     clients:
+        # Le nom 'github' ici est celui que vous utiliserez dans getClient('github')
         github:
+            # Le type 'github' indique que vous utilisez GitHub comme fournisseur OAuth
             type: github
-            client_id: '%env(OAUTH_GITHUB_CLIENT_ID)%'        
+            # Votre ID client GitHub
+            client_id: '%env(OAUTH_GITHUB_CLIENT_ID)%'
+            # Votre secret client GitHub
             client_secret: '%env(OAUTH_GITHUB_CLIENT_SECRET)%'
+            # La route de redirection: doit correspondre à une route dans votre application Symfony
+            # Cette route est appelée après l'authentification réussie sur GitHub
             redirect_route: connect_github_check
+            # Paramètres supplémentaires de redirection (si nécessaire)
             redirect_params: {}
+            # Vous pouvez ajouter des options supplémentaires spécifiques au fournisseur ici
+            # Par exemple, pour définir l'URL de l'API si vous utilisez une instance GitHub Enterprise
+            # url_api: 'https://api.github.com/'
+            # url_web: 'https://github.com/'
+            # url_token: 'https://github.com/login/oauth/access_token'
+            # url_authorize: 'https://github.com/login/oauth/authorize'
+

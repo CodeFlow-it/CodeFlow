@@ -1,18 +1,40 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div class="auth-view">
+    <img src="../assets/codeflow.png" alt="" />
+    <hello-world>Authentification</hello-world>
+    <ButtonComp msg="Connexion" :url="apiUrl"></ButtonComp>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+import { defineComponent, ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import HelloWorld from "@/components/auth.vue"; // @ is an alias to /src
+import ButtonComp from "@/components/button.vue";
 
 export default defineComponent({
-  name: "HomeView",
+  name: "AuthView",
+  setup() {
+    const apiUrl = ref("http://localhost:8000/connect/github");
+
+    return { apiUrl };
+  },
+
   components: {
     HelloWorld,
+    ButtonComp,
   },
 });
 </script>
+<style>
+img {
+  margin: auto;
+  width: 20%;
+  height: 20%;
+}
+
+hello-world {
+  color: white;
+  font-size: larger;
+}
+</style>
