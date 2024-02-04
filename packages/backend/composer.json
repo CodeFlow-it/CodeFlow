@@ -12,6 +12,7 @@
         "doctrine/orm": "^2.17",
         "knpuniversity/oauth2-client-bundle": "^2.18",
         "league/oauth2-github": "^3.1",
+        "nelmio/cors-bundle": "^2.4",
         "php-amqplib/php-amqplib": "^3.6",
         "symfony/console": "6.4.*",
         "symfony/dotenv": "6.4.*",
