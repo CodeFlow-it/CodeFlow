@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Message\AnalysisMessage;
-use App\Service\QueueManagerService;
+use App\Service\CloneRepositoryService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,6 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CodeAnalysisController extends AbstractController
 {
+    private CloneRepositoryService $cloneRepositoryService;
+
+    public function __construct(CloneRepositoryService $cloneRepositoryService)
+    {
+        $this->cloneRepositoryService = $cloneRepositoryService;
+    }
+
     #[Route('/api/analysis/{projectName}', name: 'app_run_analysis', methods: 'POST')]
     public function run(Request $request, string $projectName, MessageBusInterface $bus): JsonResponse
     {
@@ -26,8 +33,9 @@ class CodeAnalysisController extends AbstractController
         $username = $user->getUsername();
         $parameters = json_decode($request->getContent());
         $analysis = $parameters->analysis;
+        $repositoryUrl = $parameters->repoUrl;
 
-        $targetDirectory = $this->createUserDirectory($username, $projectName);
+        $targetDirectory = $this->cloneRepositoryService->clone($repositoryUrl, $username, $projectName);
 
         $bus->dispatch(new AnalysisMessage($targetDirectory, $analysis));
 
@@ -35,19 +43,5 @@ class CodeAnalysisController extends AbstractController
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/CodeAnalysisController.php',
         ]);
-    }
-
-    private function createUserDirectory(string $username, string $projectName): string
-    {
-        $targetDirectory = $this->getParameter('kernel.project_dir') . '/repositories/' . '/' .  $username . '/' . $projectName;
-        $filesystem = new Filesystem();
-
-        if ($filesystem->exists($targetDirectory)) {
-            $filesystem->remove($targetDirectory);
-        }
-
-        $filesystem->mkdir($targetDirectory);
-
-        return $targetDirectory;
     }
 }

@@ -34,48 +34,34 @@ class RepositoryController extends AbstractController
         return $this->json(['repo' => $repositories]);
     }
 
-    #[Route('api/repository/clone/{projectName}', name: 'app_clone_repository')]
-    public function clone(string $projectName): JsonResponse
-    {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
+    // #[Route('api/repository/clone/{projectName}', name: 'app_clone_repository')]
+    // public function clone(string $projectName): JsonResponse
+    // {
+    //     /** @var \App\Entity\User $user */
+    //     $user = $this->getUser();
 
-        if (!$user) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
+    //     if (!$user) {
+    //         return $this->json(['error' => 'Unauthorized'], 401);
+    //     }
 
-        $username = $user->getUsername();
-        $accessToken = $user->getAccessToken();
-        $targetDirectory = $this->createUserDirectory($username, $projectName);
+    //     $username = $user->getUsername();
+    //     $accessToken = $user->getAccessToken();
+    //     $targetDirectory = $this->createUserDirectory($username, $projectName);
 
-        try {
-            $repository = $this->getGitHubRepositoryInformation($username, $projectName, $accessToken);
-            $repositoryUrl = $repository['html_url'];
+    //     try {
+    //         $repository = $this->getGitHubRepositoryInformation($username, $projectName, $accessToken);
+    //         $repositoryUrl = $repository['html_url'];
 
-            $this->cloneRepository($repositoryUrl, $targetDirectory);
+    //         $this->cloneRepository($repositoryUrl, $targetDirectory);
 
-            return $this->json([
-                'message' => 'Repository cloned successfully',
-                'repository_info' => $repository,
-            ]);
-        } catch (TransportException $e) {
-            return $this->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    private function createUserDirectory(string $username, string $projectName): string
-    {
-        $targetDirectory = $this->getParameter('kernel.project_dir') . '/repositories/' . '/' .  $username . '/' . $projectName;
-        $filesystem = new Filesystem();
-
-        if ($filesystem->exists($targetDirectory)) {
-            $filesystem->remove($targetDirectory);
-        }
-
-        $filesystem->mkdir($targetDirectory);
-
-        return $targetDirectory;
-    }
+    //         return $this->json([
+    //             'message' => 'Repository cloned successfully',
+    //             'repository_info' => $repository,
+    //         ]);
+    //     } catch (TransportException $e) {
+    //         return $this->json(['error' => $e->getMessage()], 500);
+    //     }
+    // }
 
     private function getGitHubRepositoryInformation(string $username, string $name, string $accessToken): array
     {
@@ -111,15 +97,5 @@ class RepositoryController extends AbstractController
         }
 
         return $response->toArray();
-    }
-
-    private function cloneRepository(string $url, string $targetDirectory): void
-    {
-        $process = new Process(['git', 'clone', $url, $targetDirectory]);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
     }
 }

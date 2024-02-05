@@ -10,7 +10,9 @@
         <a class="lien" :href="repo.html_url" target="_blank">{{
           repo.html_url
         }}</a>
-        <button v-on:click="runAnalysis(repo.name)">Analyser</button>
+        <button v-on:click="runAnalysis(repo.name, repo.html_url)">
+          Analyser
+        </button>
       </li>
     </ul>
   </div>
@@ -45,7 +47,7 @@ export default defineComponent({
       }
     };
 
-    const runAnalysis = async (repoName: string) => {
+    const runAnalysis = async (repoName: string, repoUrl: string) => {
       try {
         const response = await fetch(
           `http://localhost:8000/api/analysis/${repoName}`,
@@ -53,7 +55,7 @@ export default defineComponent({
             headers: { "Content-Type": "application/json" },
             method: "POST",
             credentials: "include",
-            body: JSON.stringify({ analysis: "php_stan" }),
+            body: JSON.stringify({ analysis: "php_stan", repoUrl: repoUrl }),
           }
         );
         if (!response.ok) {
