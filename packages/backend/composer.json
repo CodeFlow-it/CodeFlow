@@ -14,11 +14,13 @@
         "league/oauth2-github": "^3.1",
         "nelmio/cors-bundle": "^2.4",
         "php-amqplib/php-amqplib": "^3.6",
+        "symfony/amqp-messenger": "6.4.*",
         "symfony/console": "6.4.*",
         "symfony/dotenv": "6.4.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.4.*",
         "symfony/http-client": "6.4.*",
+        "symfony/messenger": "6.4.*",
         "symfony/runtime": "6.4.*",
         "symfony/security-bundle": "6.4.*",
         "symfony/yaml": "6.4.*"

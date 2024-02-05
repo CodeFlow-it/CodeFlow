@@ -16,7 +16,7 @@ class RepositoryController extends AbstractController
 {
     private const GITHUB_API_VERSION = '2022-11-28';
 
-    #[Route('api/repositories', name: 'app_repositories')]
+    #[Route('api/repositories', name: 'app_repositories', methods: 'GET')]
     public function index()
     {
         /** @var \App\Entity\User $user */
