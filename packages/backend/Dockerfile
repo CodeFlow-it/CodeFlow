@@ -1,5 +1,7 @@
 FROM php:8.2-apache
 
+ENV APP_ENV=dev
+
 WORKDIR /var/www/app
 
 RUN apt-get update && apt-get install -y \
@@ -9,13 +11,17 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install \
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions \
     intl \
     zip \
     pdo_mysql \
     pdo \
-    sockets
-
+    sockets \
+    amqp
+    
 RUN a2enmod rewrite
 
 COPY . /var/www/app

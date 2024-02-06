@@ -10,6 +10,9 @@
         <a class="lien" :href="repo.html_url" target="_blank">{{
           repo.html_url
         }}</a>
+        <button v-on:click="runAnalysis(repo.name, repo.html_url)">
+          Analyser
+        </button>
       </li>
     </ul>
   </div>
@@ -28,6 +31,7 @@ export default defineComponent({
       isLoading.value = true; // Commencer le chargement
       try {
         const response = await fetch("http://localhost:8000/api/repositories", {
+          headers: { "Content-Type": "application/json" },
           method: "GET",
           credentials: "include",
         });
@@ -43,9 +47,30 @@ export default defineComponent({
       }
     };
 
+    const runAnalysis = async (repoName: string, repoUrl: string) => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/analysis/${repoName}`,
+          {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({ analysis: "php_stan", repoUrl: repoUrl }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données:", error);
+      }
+    };
+
     onMounted(fetchRepositories);
 
-    return { repositories, isLoading };
+    return { repositories, isLoading, runAnalysis };
   },
 });
 </script>

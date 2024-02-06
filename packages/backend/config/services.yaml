@@ -38,3 +38,12 @@ services:
   App\Service\QueueManagerService:
     arguments:
       $rabbitMQConnectionService: '@App\Service\RabbitMQConnectionService'
+
+  App\Service\CloneRepositoryService:
+    arguments:
+      $params: '@parameter_bag'
+  
+  App\MessageHandler\AnalysisMessageHandler:
+    arguments:
+      $queueManagerService: '@App\Service\QueueManagerService'
+      $PHPStanAnalysisService: '@App\Service\PHPStanAnalysisService'
