@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Service\RabbitMQConnectionService;
 use PhpAmqpLib\Message\AMQPMessage;
+use App\Service\RabbitMQConnectionService;
 
 /**
  * Service for managing queue and message

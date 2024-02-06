@@ -13,12 +13,12 @@ class AnalysisMessage
         $this->type = $type;
     }
 
-    public function getDirectory()
+    public function getDirectory(): string
     {
         return $this->directory;
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }

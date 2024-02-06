@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Message\AnalysisMessage;
 use App\Service\CloneRepositoryService;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,7 +40,7 @@ class CodeAnalysisController extends AbstractController
 
         return $this->json([
             'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/CodeAnalysisController.php',
+            'analysis' => $analysis,
         ]);
     }
 }
