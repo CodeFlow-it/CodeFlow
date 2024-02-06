@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use Symfony\Component\Process\Process;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -11,10 +10,8 @@ class PHPStanAnalysisService
 {
     private $outputFormat = 'prettyJson';
 
-    public function run(string $sourceDirectory)
+    public function run(string $sourceDirectory): void
     {
-        // $this->saveToJson('phpstan', 'salut', $sourceDirectory);
-
         $process = new Process([
             'vendor/bin/phpstan',
             'analyse',
@@ -23,16 +20,16 @@ class PHPStanAnalysisService
         ]);
         $process->run();
 
-        // if (!$process->isSuccessful()) {
-        //     throw new ProcessFailedException($process);
-        // }
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
 
         $jsonResult = $process->getOutput();
 
         $this->saveToJson('phpstan', $jsonResult, $sourceDirectory);
     }
 
-    private function saveToJson(string $filename, string $data, string $sourceDirectory)
+    private function saveToJson(string $filename, string $data, string $sourceDirectory): void
     {
         $info = pathinfo($sourceDirectory);
         $destination = $info['dirname'] . '/reports';

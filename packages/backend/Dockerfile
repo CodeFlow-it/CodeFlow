@@ -1,5 +1,7 @@
 FROM php:8.2-apache
 
+ENV APP_ENV=dev
+
 WORKDIR /var/www/app
 
 RUN apt-get update && apt-get install -y \
