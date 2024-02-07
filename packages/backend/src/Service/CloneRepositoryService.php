@@ -12,13 +12,29 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class CloneRepositoryService
 {
+    /**
+     * @var Container parameter
+     */
     private $params;
 
+    /**
+     * CloneRepositoryService constructor
+     *
+     * @param  ParameterBagInterface $params
+     */
     public function __construct(ParameterBagInterface $params)
     {
         $this->params = $params;
     }
 
+    /**
+     * Clone a repository from github into the user directory
+     *
+     * @param  string $url
+     * @param  string $username
+     * @param  string $projectName
+     * @return string $targetDirectory
+     */
     public function clone(string $url, string $username, string $projectName): string
     {
         $targetDirectory = $this->createUserDirectory($username, $projectName);
@@ -32,6 +48,13 @@ class CloneRepositoryService
         return $targetDirectory;
     }
 
+    /**
+     * Create the user directory for his projects
+     *
+     * @param  string $username
+     * @param  string $projectName
+     * @return string $targetDirectory
+     */
     private function createUserDirectory(string $username, string $projectName): string
     {
         $targetDirectory = $this->params->get('kernel.project_dir') . '/repositories/' . '/' .  $username . '/' . $projectName;

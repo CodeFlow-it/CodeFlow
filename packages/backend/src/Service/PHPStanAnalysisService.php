@@ -6,10 +6,19 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+/**
+ * Service to launch a code analysis with PHPStan
+ */
 class PHPStanAnalysisService
 {
     private $outputFormat = 'prettyJson';
 
+    /**
+     * Run the analysis
+     *
+     * @param  string $sourceDirectory
+     * @return void
+     */
     public function run(string $sourceDirectory): void
     {
         $process = new Process([
@@ -29,6 +38,14 @@ class PHPStanAnalysisService
         $this->saveToJson('phpstan', $jsonResult, $sourceDirectory);
     }
 
+    /**
+     * Save the analysis report in json
+     *
+     * @param  string $filename
+     * @param  string $data
+     * @param  string $sourceDirectory
+     * @return void
+     */
     private function saveToJson(string $filename, string $data, string $sourceDirectory): void
     {
         $info = pathinfo($sourceDirectory);

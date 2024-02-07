@@ -10,15 +10,36 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Class CodeAnalysisController
+ *
+ * @package App\Controller
+ */
 class CodeAnalysisController extends AbstractController
 {
+    /**
+     * @var CloneRepositoryService
+     */
     private CloneRepositoryService $cloneRepositoryService;
 
+    /**
+     * CodeAnalysisController constructor
+     *
+     * @param CloneRepositoryService $cloneRepositoryService
+     */
     public function __construct(CloneRepositoryService $cloneRepositoryService)
     {
         $this->cloneRepositoryService = $cloneRepositoryService;
     }
 
+    /**
+     * Runs the analysis for a project
+     *
+     * @param Request $request The request object
+     * @param string $projectName The name of the project
+     * @param MessageBusInterface $bus The message bus interface
+     * @return JsonResponse The JSON response
+     */
     #[Route('/api/analysis/{projectName}', name: 'app_run_analysis', methods: 'POST')]
     public function run(Request $request, string $projectName, MessageBusInterface $bus): JsonResponse
     {
@@ -39,8 +60,7 @@ class CodeAnalysisController extends AbstractController
         $bus->dispatch(new AnalysisMessage($targetDirectory, $analysis));
 
         return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'analysis' => $analysis,
+            'message' => 'Analysis request executed'
         ]);
     }
 }

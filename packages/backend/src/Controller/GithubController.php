@@ -2,18 +2,29 @@
 
 namespace App\Controller;
 
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Manage authentication via OAuth protocol to Github
+ * 
+ * @package App\Controller
+ */
 class GithubController extends AbstractController
 {
-
-    #[Route('/connect/github', name: 'connect_github')]
-    public function connectAction(ClientRegistry $clientRegistry)
+    /**
+     * Connect to the application via github OAuth
+     *
+     * @param  ClientRegistry $clientRegistry
+     * @return RedirectResponse
+     */
+    #[Route('/connect/github', name: 'connect_github', methods: 'GET')]    
+    public function connectAction(ClientRegistry $clientRegistry): RedirectResponse
     {
-        return $clientRegistry->getClient('github')->redirect(['user','user:email'], ['user']);
+        return $clientRegistry->getClient('github')->redirect(['user', 'user:email'], ['user']);
     }
 
     // ** if you want to *authenticate* the user, then
