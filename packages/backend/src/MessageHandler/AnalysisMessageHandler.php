@@ -23,6 +23,6 @@ class AnalysisMessageHandler
     {
         $this->queueManagerService->createQueue($message->getType());        
         $this->queueManagerService->publishMessage($message->getType(), $message->getDirectory());
-        $this->PHPStanAnalysisService->run($message->getDirectory());
+        $this->PHPStanAnalysisService->run($message->getDirectory(), $message->getProjectId());
     }
 }

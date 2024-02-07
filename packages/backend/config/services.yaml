@@ -41,8 +41,12 @@ services:
 
   App\Service\CloneRepositoryService:
     arguments:
-      $params: '@parameter_bag'
-  
+      $params: "@parameter_bag"
+
+  App\Service\PHPStanAnalysisService:
+    arguments:
+      $entityManager: '@Doctrine\ORM\EntityManagerInterface'
+
   App\MessageHandler\AnalysisMessageHandler:
     arguments:
       $queueManagerService: '@App\Service\QueueManagerService'

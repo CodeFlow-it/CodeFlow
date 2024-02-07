@@ -60,7 +60,7 @@ class CloneRepositoryService
      */
     private function createUserDirectory(string $userId, string $projectId): string
     {
-        $targetDirectory = $this->params->get('kernel.project_dir') . '/repositories/' . '/' .  $userId . '/' . $projectId;
+        $targetDirectory = $this->params->get('kernel.project_dir') . '/repositories/' .  $userId . '/' . $projectId;
         $filesystem = new Filesystem();
 
         if ($filesystem->exists($targetDirectory)) {

@@ -13,3 +13,6 @@ composer.phar
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+repositories
+reports

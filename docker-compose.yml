@@ -10,7 +10,7 @@ services:
       - ./packages/frontend:/app
       - /app/node_modules
     depends_on:
-      - backend
+      - backend 
     environment:
       - NODE_ENV=development
 
@@ -23,7 +23,7 @@ services:
       - ./packages/backend:/var/www/app/
       - /var/www/app/vendor
       - /var/www/app/var
-      - ./packages/repositories:/var/www/app/repositories
+      - /packages/backend/repositories
     depends_on:
       - db
 
@@ -47,13 +47,13 @@ services:
     volumes:
       - ./packages/rabbitmq:/var/lib/rabbitmq
 
-  exakat:
-    image: exakat
-    build: ./packages/exakat
-    volumes:
-      - ./packages/repositories:/app/repositories
-    depends_on:
-      - rabbitmq
+  # exakat:
+  #   image: exakat
+  #   build: ./packages/exakat
+  #   volumes:
+  #     - ./packages/repositories:/app/repositories
+  #   depends_on:
+  #     - rabbitmq
 
   adminer:
     image: adminer

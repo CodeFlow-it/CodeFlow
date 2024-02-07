@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -66,7 +65,7 @@ class CodeAnalysisController extends AbstractController
         $targetDirectory = $this->cloneRepositoryService->clone($repositoryUrl, (string)$user->getId(), (string)$projectId);
         $this->setProjectSource($projectId, $targetDirectory);
 
-        $bus->dispatch(new AnalysisMessage($targetDirectory, $analysis));
+        $bus->dispatch(new AnalysisMessage($targetDirectory, $analysis, $projectId, $user->getId()));
 
         return $this->json([
             'message' => 'Analysis request executed',
@@ -99,7 +98,6 @@ class CodeAnalysisController extends AbstractController
 
         return $project->getId();
     }
-
 
     /**
      * Set the project source
