@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Entity\User;
+use App\Entity\Project;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -31,13 +33,13 @@ class CloneRepositoryService
      * Clone a repository from github into the user directory
      *
      * @param  string $url
-     * @param  string $username
-     * @param  string $projectName
+     * @param  int $userId
+     * @param  int $projectId
      * @return string $targetDirectory
      */
-    public function clone(string $url, string $username, string $projectName): string
+    public function clone(string $url, string $userId, string $projectId): string
     {
-        $targetDirectory = $this->createUserDirectory($username, $projectName);
+        $targetDirectory = $this->createUserDirectory($userId, $projectId);
         $process = new Process(['git', 'clone', $url, $targetDirectory]);
         $process->run();
 
@@ -48,16 +50,17 @@ class CloneRepositoryService
         return $targetDirectory;
     }
 
+
     /**
      * Create the user directory for his projects
      *
-     * @param  string $username
-     * @param  string $projectName
+     * @param  string $userId
+     * @param  string $projectId
      * @return string $targetDirectory
      */
-    private function createUserDirectory(string $username, string $projectName): string
+    private function createUserDirectory(string $userId, string $projectId): string
     {
-        $targetDirectory = $this->params->get('kernel.project_dir') . '/repositories/' . '/' .  $username . '/' . $projectName;
+        $targetDirectory = $this->params->get('kernel.project_dir') . '/repositories/' . '/' .  $userId . '/' . $projectId;
         $filesystem = new Filesystem();
 
         if ($filesystem->exists($targetDirectory)) {
