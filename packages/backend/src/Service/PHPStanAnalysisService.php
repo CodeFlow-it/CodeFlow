@@ -75,8 +75,8 @@ class PHPStanAnalysisService
 
         $filesystem->mkdir($reportDirectory);
 
-        $fileName = $filename . '_' . time() . '.txt';
-        $filePath = $reportDirectory . '/' . $fileName;
+        $filename .= '_' . time() . '.txt';
+        $filePath = $reportDirectory . '/' . $filename;
 
         if (file_put_contents($filePath, $data) === false) {
             throw new FileException("Unable to save file.");
