@@ -4,6 +4,7 @@ namespace App\MessageHandler;
 
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use App\Message\AnalysisMessage;
+use App\Service\MailerService;
 use App\Service\QueueManagerService;
 use App\Service\PHPStanAnalysisService;
 
@@ -12,17 +13,23 @@ class AnalysisMessageHandler
 {
     private QueueManagerService $queueManagerService;
     private PHPStanAnalysisService $PHPStanAnalysisService;
+    private MailerService $mailerService;
 
-    public function __construct(QueueManagerService $queueManagerService, PHPStanAnalysisService $PHPStanAnalysisService)
-    {
+    public function __construct(
+        QueueManagerService $queueManagerService,
+        PHPStanAnalysisService $PHPStanAnalysisService,
+        MailerService $mailerService
+    ) {
         $this->queueManagerService = $queueManagerService;
         $this->PHPStanAnalysisService = $PHPStanAnalysisService;
+        $this->mailerService = $mailerService;
     }
 
     public function __invoke(AnalysisMessage $message)
     {
-        $this->queueManagerService->createQueue($message->getType());        
+        $this->queueManagerService->createQueue($message->getType());
         $this->queueManagerService->publishMessage($message->getType(), $message->getDirectory());
         $this->PHPStanAnalysisService->run($message->getDirectory(), $message->getProjectId());
+        $this->mailerService->sendProjectToUser($message->getUserId(), $message->getProjectId());
     }
 }

@@ -50,7 +50,6 @@ class CloneRepositoryService
         return $targetDirectory;
     }
 
-
     /**
      * Create the user directory for his projects
      *
@@ -66,7 +65,6 @@ class CloneRepositoryService
         if ($filesystem->exists($targetDirectory)) {
             $filesystem->remove($targetDirectory);
         }
-
         $filesystem->mkdir($targetDirectory);
 
         return $targetDirectory;

@@ -47,7 +47,18 @@ services:
     arguments:
       $entityManager: '@Doctrine\ORM\EntityManagerInterface'
 
+  App\Service\MailerService:
+    arguments:
+      $entityManager: '@Doctrine\ORM\EntityManagerInterface'
+      $mailer: '@Symfony\Component\Mailer\MailerInterface'
+
   App\MessageHandler\AnalysisMessageHandler:
     arguments:
       $queueManagerService: '@App\Service\QueueManagerService'
       $PHPStanAnalysisService: '@App\Service\PHPStanAnalysisService'
+
+
+# arguments:
+#             $manager: '@Doctrine\ORM\EntityManagerInterface'
+#             $args: '@Doctrine\Persistence\Event\LifecycleEventArgs'
+#             $gitLink: '@App\Entity\GitLink'

@@ -47,9 +47,8 @@ class PHPStanAnalysisService
             $process->run();
 
             if (!$process->isSuccessful() || $process->getExitCode() !==  0) {
-                $jsonResult = $process->getOutput();
-
-                $filename = $this->saveToText('phpstan', $jsonResult, $reportDirectory);
+                $report = $process->getOutput();
+                $filename = $this->saveToText('phpstan', $report, $reportDirectory);
                 $this->storeReport($projectId, $reportDirectory, $filename);
             }
         } catch (ProcessFailedException) {
